@@ -1,19 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { User, Lock, ArrowRight, Github, Sparkles, Shield, Zap } from "lucide-react";
+import { Github, Sparkles, Shield, Zap } from "lucide-react";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      window.location.href = "/dashboard";
-    }, 1500);
-  };
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get("error");
+  const successParam = searchParams.get("success");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 relative overflow-hidden">
@@ -79,59 +75,33 @@ export default function LoginPage() {
               <p className="mt-2 text-sm text-muted-foreground">Chào mừng bạn quay trở lại!</p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div className="space-y-4">
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-                  <input 
-                    type="text" 
-                    placeholder="Tên đăng nhập"
-                    className="h-12 w-full rounded-xl border border-border glass pl-12 pr-4 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-                  <input 
-                    type="password" 
-                    placeholder="Mật khẩu"
-                    className="h-12 w-full rounded-xl border border-border glass pl-12 pr-4 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    id="remember"
-                    className="h-4 w-4 rounded border-border text-cta focus:ring-cta cursor-pointer" 
-                  />
-                  <label htmlFor="remember" className="ml-2 text-sm text-muted-foreground cursor-pointer">
-                    Ghi nhớ đăng nhập
-                  </label>
-                </div>
-                <Link href="#" className="text-sm font-semibold text-cta hover:text-cta/80 cursor-pointer">
-                  Quên mật khẩu?
-                </Link>
-              </div>
-
-              <button 
-                type="submit"
-                disabled={loading}
-                className="group relative flex h-12 w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-cta to-primary text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-cta/30 active:scale-98 cursor-pointer"
+            {/* Display success message from query params */}
+            {successParam && (
+              <div 
+                className="mb-5 rounded-xl border border-green-500/50 bg-green-500/10 p-4 text-sm text-green-500"
+                role="alert"
+                aria-live="polite"
               >
-                {loading ? (
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                ) : (
-                  <>
-                    <span>Đăng nhập ngay</span>
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </>
-                )}
-              </button>
-            </form>
+                {successParam === "registered" && "Đăng ký thành công! Vui lòng đăng nhập."}
+                {successParam === "logout" && "Đã đăng xuất thành công."}
+              </div>
+            )}
+
+            {/* Display error message from query params */}
+            {errorParam && (
+              <div 
+                className="mb-5 rounded-xl border border-red-500/50 bg-red-500/10 p-4 text-sm text-red-500"
+                role="alert"
+                aria-live="polite"
+              >
+                {errorParam === "session_expired" && "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."}
+                {errorParam === "access_denied" && "Bạn không có quyền truy cập. Vui lòng đăng nhập."}
+                {errorParam === "invalid_session" && "Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại."}
+              </div>
+            )}
+
+            {/* Login form component */}
+            <LoginForm />
 
             <div className="relative my-6 text-center text-xs text-muted-foreground">
               <div className="absolute inset-0 flex items-center">
@@ -141,12 +111,20 @@ export default function LoginPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <button className="flex h-11 items-center justify-center rounded-xl border border-border glass text-sm font-medium text-foreground transition-all hover:border-primary/30 cursor-pointer">
-                <Github className="mr-2 h-4 w-4" />
+              <button 
+                type="button"
+                className="flex h-11 items-center justify-center rounded-xl border border-border glass text-sm font-medium text-foreground transition-all hover:border-primary/30 cursor-pointer"
+                aria-label="Sign in with GitHub"
+              >
+                <Github className="mr-2 h-4 w-4" aria-hidden="true" />
                 GitHub
               </button>
-              <button className="flex h-11 items-center justify-center rounded-xl border border-border glass text-sm font-medium text-foreground transition-all hover:border-primary/30 cursor-pointer">
-                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+              <button 
+                type="button"
+                className="flex h-11 items-center justify-center rounded-xl border border-border glass text-sm font-medium text-foreground transition-all hover:border-primary/30 cursor-pointer"
+                aria-label="Sign in with Google"
+              >
+                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>

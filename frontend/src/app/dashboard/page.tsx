@@ -1,4 +1,7 @@
-import { TrendingUp, ShoppingBag, CreditCard, Activity, ArrowUpRight, Clock } from "lucide-react";
+"use client";
+
+import { TrendingUp, ShoppingBag, CreditCard, Activity, ArrowUpRight, Clock, Sparkles, Flame, Shield, Users, Crown } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const stats = [
   { label: "Tổng đơn hàng", value: "1,280", change: "+12.5%", icon: ShoppingBag, color: "text-blue-500", bg: "bg-blue-500/10" },
@@ -14,12 +17,98 @@ const recentOrders = [
 ];
 
 export default function DashboardPage() {
+  const { user, isAdmin, isAgent, isMember } = useAuth();
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Chào mừng trở lại! 👋</h1>
-        <p className="mt-2 text-muted-foreground">Theo dõi hoạt động và quản lý các đơn hàng của bạn.</p>
+        <div className="flex items-center space-x-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Chào mừng trở lại{user?.username ? `, ${user.username}` : ""}!
+          </h1>
+          <Sparkles className="h-7 w-7 text-yellow-500" />
+          {isAdmin && <Crown className="h-7 w-7 text-yellow-500" />}
+          {isAgent && <Shield className="h-7 w-7 text-blue-500" />}
+        </div>
+        <p className="mt-2 text-muted-foreground">
+          Theo dõi hoạt động và quản lý các đơn hàng của bạn.
+          {isAdmin && " (Chế độ quản trị viên)"}
+          {isAgent && " (Chế độ đại lý)"}
+        </p>
       </div>
+
+      {/* Admin-only System Stats */}
+      {isAdmin && (
+        <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30">
+          <div className="flex items-center space-x-2 mb-4">
+            <Crown className="h-6 w-6 text-yellow-500" />
+            <h3 className="text-lg font-bold text-foreground">Thống kê hệ thống (Admin)</h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Tổng người dùng</p>
+              <p className="text-2xl font-bold text-foreground">1,542</p>
+              <p className="text-xs text-green-500 mt-1">+45 hôm nay</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Doanh thu hôm nay</p>
+              <p className="text-2xl font-bold text-foreground">24.5M đ</p>
+              <p className="text-xs text-green-500 mt-1">+18.2%</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Đơn hàng đang xử lý</p>
+              <p className="text-2xl font-bold text-foreground">87</p>
+              <p className="text-xs text-orange-500 mt-1">Cần xem xét</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Agent-only Commission Stats */}
+      {isAgent && (
+        <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-2 border-blue-500/30">
+          <div className="flex items-center space-x-2 mb-4">
+            <Shield className="h-6 w-6 text-blue-500" />
+            <h3 className="text-lg font-bold text-foreground">Hoa hồng đại lý</h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Hoa hồng tháng này</p>
+              <p className="text-2xl font-bold text-blue-500">1.2M đ</p>
+              <p className="text-xs text-green-500 mt-1">+23.5%</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Khách hàng giới thiệu</p>
+              <p className="text-2xl font-bold text-foreground">24</p>
+              <p className="text-xs text-blue-500 mt-1">+3 tuần này</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Cấp bậc</p>
+              <p className="text-2xl font-bold text-foreground">Silver</p>
+              <p className="text-xs text-muted-foreground mt-1">1.5M đến Gold</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Member-only Upgrade Prompt */}
+      {isMember && (
+        <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="glass rounded-xl p-3">
+                <Users className="h-6 w-6 text-purple-500" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-foreground">Nâng cấp lên Đại lý</h3>
+                <p className="text-sm text-muted-foreground">Kiếm thêm thu nhập với hoa hồng lên đến 20%</p>
+              </div>
+            </div>
+            <button className="rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer">
+              Tìm hiểu thêm
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
@@ -79,7 +168,10 @@ export default function DashboardPage() {
         </div>
 
         <div className="glass-card rounded-2xl p-6">
-          <h3 className="text-lg font-bold text-foreground mb-6">Gợi ý dịch vụ 🔥</h3>
+          <div className="flex items-center space-x-2 mb-6">
+            <h3 className="text-lg font-bold text-foreground">Gợi ý dịch vụ</h3>
+            <Flame className="h-5 w-5 text-orange-500" />
+          </div>
           
           <div className="space-y-4">
             <div className="glass rounded-xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4 cursor-pointer hover:border-blue-500/40 transition-all">

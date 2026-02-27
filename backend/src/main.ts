@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -14,7 +15,9 @@ async function bootstrap() {
 
   app.enableCors();
   
-  await app.listen(process.env.PORT ?? 4000);
+  const port = Number(process.env.PORT ?? 4000);
+  const host = process.env.HOST ?? '0.0.0.0';
+  await app.listen(port, host);
   console.log(`Backend is running on: ${await app.getUrl()}`);
 }
 bootstrap();

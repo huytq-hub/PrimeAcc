@@ -1,0 +1,1 @@
+const { PrismaClient } = require('@prisma/client'); try { const prisma = new PrismaClient({ url: 'postgresql://postgres:postgres@localhost:5432/primeacc?schema=public' }); console.log('Success'); } catch (e) { console.error(e.message); }

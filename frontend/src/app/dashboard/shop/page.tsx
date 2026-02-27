@@ -1,6 +1,7 @@
 "use client";
 
 import { ShoppingBag, Zap, ShieldCheck, Clock, Star } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 
 const products = [
   { id: 1, name: "Netflix Premium - 1 Month", price: 45000, stock: 12, category: "Streaming", rating: 4.8 },
@@ -16,7 +17,10 @@ export default function ShopPage() {
     <div className="space-y-8">
       <div className="flex flex-col space-y-4 lg:flex-row lg:items-end lg:justify-between lg:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Cửa hàng Tài khoản 🛍️</h1>
+          <div className="flex items-center space-x-2">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Cửa hàng Tài khoản</h1>
+            <ShoppingBag className="h-7 w-7 text-primary" />
+          </div>
           <p className="mt-2 text-muted-foreground">Tài khoản Premium, Key bản quyền, giao hàng tự động 24/7.</p>
         </div>
         <div className="flex items-center space-x-3 glass rounded-xl p-4 border border-cta/20">
@@ -61,7 +65,7 @@ export default function ShopPage() {
             <div className="mt-6 flex items-center justify-between pt-4 border-t border-border">
               <div>
                 <p className="text-xs text-muted-foreground">Giá chỉ từ</p>
-                <p className="text-2xl font-black text-foreground">{product.price.toLocaleString()}đ</p>
+                <p className="text-2xl font-black text-foreground">{formatNumber(product.price)}đ</p>
               </div>
               <button className="rounded-xl bg-gradient-to-r from-cta to-primary px-6 py-3 text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-cta/30 active:scale-95">
                 Mua ngay

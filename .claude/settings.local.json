@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(xargs grep:*)",
+      "WebSearch",
+      "Bash(npx prisma:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm test:*)"
+    ]
+  }
+}

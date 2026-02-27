@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Code, Key, BookOpen, Copy, CheckCircle2, ExternalLink } from "lucide-react";
+import { Code, Key, BookOpen, Copy, CheckCircle2, ExternalLink, AlertCircle, FileText } from "lucide-react";
 
 const endpoints = [
   {
@@ -60,7 +60,10 @@ console.log(data);`;
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Tài liệu API 📚</h1>
+        <div className="flex items-center space-x-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Tài liệu API</h1>
+          <BookOpen className="h-7 w-7 text-primary" />
+        </div>
         <p className="mt-2 text-muted-foreground">Tích hợp dịch vụ vào hệ thống của bạn với API RESTful.</p>
       </div>
 
@@ -90,9 +93,12 @@ console.log(data);`;
             </div>
 
             <div className="mt-4 p-4 rounded-xl bg-orange-500/10 border border-orange-500/30">
-              <p className="text-sm text-foreground">
-                ⚠️ Không chia sẻ API key với bất kỳ ai. Key này có quyền truy cập đầy đủ vào tài khoản của bạn.
-              </p>
+              <div className="flex items-start space-x-2">
+                <AlertCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-foreground">
+                  Không chia sẻ API key với bất kỳ ai. Key này có quyền truy cập đầy đủ vào tài khoản của bạn.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -177,7 +183,10 @@ console.log(data);`;
           </div>
 
           <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30">
-            <h3 className="text-lg font-bold text-foreground mb-2">📖 Full Documentation</h3>
+            <div className="flex items-center space-x-2 mb-2">
+              <FileText className="h-5 w-5 text-blue-500" />
+              <h3 className="text-lg font-bold text-foreground">Full Documentation</h3>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">
               Xem tài liệu đầy đủ với ví dụ chi tiết cho mọi ngôn ngữ lập trình.
             </p>

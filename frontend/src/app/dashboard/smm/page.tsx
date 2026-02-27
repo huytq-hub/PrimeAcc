@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search, Facebook, Instagram, Youtube, Twitter, TrendingUp, ExternalLink } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 
 const categories = [
   { name: "Tất cả", icon: TrendingUp, count: 156 },
@@ -33,7 +34,10 @@ export default function SmmPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Dịch vụ SMM 🚀</h1>
+        <div className="flex items-center space-x-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Dịch vụ SMM</h1>
+          <TrendingUp className="h-7 w-7 text-primary" />
+        </div>
         <p className="mt-2 text-muted-foreground">Tăng tương tác mạng xã hội với tốc độ và giá tốt nhất.</p>
       </div>
 
@@ -92,8 +96,8 @@ export default function SmmPage() {
               </h4>
               
               <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-                <span>Min: {service.min.toLocaleString()}</span>
-                <span>Max: {service.max.toLocaleString()}</span>
+                <span>Min: {formatNumber(service.min)}</span>
+                <span>Max: {formatNumber(service.max)}</span>
               </div>
               
               <div className="mt-2 flex items-center space-x-2">

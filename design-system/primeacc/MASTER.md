@@ -7,7 +7,7 @@
 ---
 
 **Project:** PrimeAcc
-**Generated:** 2026-02-27 13:39:33
+**Generated:** 2026-02-27 21:05:58
 **Category:** SaaS (General)
 
 ---
@@ -18,13 +18,13 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary | `#0F172A` | `--color-primary` |
-| Secondary | `#334155` | `--color-secondary` |
-| CTA/Accent | `#0369A1` | `--color-cta` |
-| Background | `#F8FAFC` | `--color-background` |
-| Text | `#020617` | `--color-text` |
+| Primary | `#E11D48` | `--color-primary` |
+| Secondary | `#FB7185` | `--color-secondary` |
+| CTA/Accent | `#2563EB` | `--color-cta` |
+| Background | `#FFF1F2` | `--color-background` |
+| Text | `#881337` | `--color-text` |
 
-**Color Notes:** Professional navy + blue CTA
+**Color Notes:** Vibrant rose + engagement blue
 
 ### Typography
 
@@ -68,7 +68,7 @@
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #0369A1;
+  background: #2563EB;
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
@@ -85,8 +85,8 @@
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: #0F172A;
-  border: 2px solid #0F172A;
+  color: #E11D48;
+  border: 2px solid #E11D48;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -99,7 +99,7 @@
 
 ```css
 .card {
-  background: #F8FAFC;
+  background: #FFF1F2;
   border-radius: 12px;
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -125,9 +125,9 @@
 }
 
 .input:focus {
-  border-color: #0F172A;
+  border-color: #E11D48;
   outline: none;
-  box-shadow: 0 0 0 3px #0F172A20;
+  box-shadow: 0 0 0 3px #E11D4820;
 }
 ```
 
@@ -163,11 +163,11 @@
 
 ### Page Pattern
 
-**Pattern Name:** App Store Style Landing
+**Pattern Name:** Video-First Hero
 
-- **Conversion Strategy:** Show real screenshots. Include ratings (4.5+ stars). QR code for mobile. Platform-specific CTAs.
-- **CTA Placement:** Download buttons prominent (App Store + Play Store) throughout
-- **Section Order:** 1. Hero with device mockup, 2. Screenshots carousel, 3. Features with icons, 4. Reviews/ratings, 5. Download CTAs
+- **Conversion Strategy:** 86% higher engagement with video. Add captions for accessibility. Compress video for performance.
+- **CTA Placement:** Overlay on video (center/bottom) + Bottom section
+- **Section Order:** 1. Hero with video background, 2. Key features overlay, 3. Benefits section, 4. CTA
 
 ---
 

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Open_Sans, Poppins } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -25,14 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${openSans.variable} ${poppins.variable} antialiased`}
         style={{
           fontFamily: 'var(--font-open-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}
       >
-        {children}
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles, Shield, Zap, Users, TrendingUp, Star, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles, Shield, Zap, Users, TrendingUp, Star, CheckCircle2, ExternalLink, Facebook, Instagram, Youtube } from "lucide-react";
 
 const features = [
   {
@@ -42,10 +42,10 @@ const stats = [
 ];
 
 const services = [
-  { name: "TikTok", icon: "🎵", desc: "Follow, Like, View" },
-  { name: "Facebook", icon: "👍", desc: "Like, Comment, Share" },
-  { name: "Instagram", icon: "📷", desc: "Follow, Like, View" },
-  { name: "YouTube", icon: "▶️", desc: "Subscribe, View, Like" },
+  { name: "TikTok", icon: ExternalLink, desc: "Follow, Like, View", color: "text-pink-500", bg: "bg-pink-500/10" },
+  { name: "Facebook", icon: Facebook, desc: "Like, Comment, Share", color: "text-blue-600", bg: "bg-blue-600/10" },
+  { name: "Instagram", icon: Instagram, desc: "Follow, Like, View", color: "text-purple-500", bg: "bg-purple-500/10" },
+  { name: "YouTube", icon: Youtube, desc: "Subscribe, View, Like", color: "text-red-500", bg: "bg-red-500/10" },
 ];
 
 export default function Home() {
@@ -89,7 +89,6 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute top-40 left-20 h-96 w-96 rounded-full bg-cta/10 blur-3xl" />
         <div className="absolute bottom-20 right-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
@@ -170,7 +169,9 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service) => (
               <div key={service.name} className="glass-card rounded-2xl p-8 text-center hover:border-primary/30 transition-all cursor-pointer group">
-                <div className="text-6xl mb-4 transition-transform group-hover:scale-110">{service.icon}</div>
+                <div className={`inline-flex items-center justify-center rounded-2xl ${service.bg} p-6 mb-4 transition-transform group-hover:scale-110`}>
+                  <service.icon className={`h-10 w-10 ${service.color}`} />
+                </div>
                 <h3 className="text-2xl font-bold text-foreground mb-2">{service.name}</h3>
                 <p className="text-sm text-muted-foreground">{service.desc}</p>
               </div>

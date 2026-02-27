@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CreditCard, Wallet, QrCode, Copy, CheckCircle2, AlertCircle } from "lucide-react";
+import { CreditCard, Wallet, QrCode, Copy, CheckCircle2, AlertCircle, DollarSign, Zap, Gift } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 
 const paymentMethods = [
   { id: "bank", name: "Chuyển khoản ngân hàng", icon: CreditCard, fee: "0%", instant: true },
@@ -30,7 +31,10 @@ export default function DepositPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Nạp tiền vào tài khoản 💰</h1>
+        <div className="flex items-center space-x-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Nạp tiền vào tài khoản</h1>
+          <DollarSign className="h-7 w-7 text-green-500" />
+        </div>
         <p className="mt-2 text-muted-foreground">Chọn phương thức thanh toán và nạp tiền ngay lập tức.</p>
       </div>
 
@@ -87,7 +91,7 @@ export default function DepositPage() {
                     onClick={() => setAmount(preset.toString())}
                     className="rounded-lg glass border border-border py-2 text-sm font-semibold text-foreground hover:border-primary/30 hover:bg-primary/5 cursor-pointer"
                   >
-                    {(preset / 1000).toLocaleString()}K
+                    {formatNumber(preset / 1000)}K
                   </button>
                 ))}
               </div>
@@ -139,14 +143,17 @@ export default function DepositPage() {
 
                 <div className="glass rounded-xl p-4">
                   <p className="text-xs text-muted-foreground mb-1">Số tiền</p>
-                  <p className="text-2xl font-black text-cta">{parseInt(amount).toLocaleString()} VNĐ</p>
+                  <p className="text-2xl font-black text-cta">{formatNumber(parseInt(amount))} VNĐ</p>
                 </div>
               </div>
 
               <div className="mt-6 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
-                <p className="text-sm text-foreground">
-                  ⚡ Tài khoản sẽ được cộng tiền tự động trong vòng 1-3 phút sau khi chuyển khoản thành công.
-                </p>
+                <div className="flex items-start space-x-2">
+                  <Zap className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-foreground">
+                    Tài khoản sẽ được cộng tiền tự động trong vòng 1-3 phút sau khi chuyển khoản thành công.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -164,7 +171,7 @@ export default function DepositPage() {
                 <div key={i} className="glass rounded-xl p-3 border border-border">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-foreground">+{transaction.amount.toLocaleString()}đ</p>
+                      <p className="text-sm font-semibold text-foreground">+{formatNumber(transaction.amount)}đ</p>
                       <p className="text-xs text-muted-foreground">{transaction.date}</p>
                     </div>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
@@ -181,7 +188,10 @@ export default function DepositPage() {
           </div>
 
           <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30">
-            <h3 className="text-lg font-bold text-foreground mb-2">🎁 Khuyến mãi</h3>
+            <div className="flex items-center space-x-2 mb-2">
+              <Gift className="h-5 w-5 text-purple-500" />
+              <h3 className="text-lg font-bold text-foreground">Khuyến mãi</h3>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">Nạp từ 500K nhận thêm 5% giá trị</p>
             <button className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 py-2.5 text-sm font-bold text-white hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer">
               Xem chi tiết

@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bullmq';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -20,7 +22,7 @@ import { TelegramModule } from './telegram/telegram.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => [
         {
-          ttl: config.get('THROTTLE_TTL', 60),
+          ttl: config.get('THROTTLE_TTL', 60000),
           limit: config.get('THROTTLE_LIMIT', 10),
         },
       ],
@@ -31,7 +33,7 @@ import { TelegramModule } from './telegram/telegram.module';
       useFactory: (config: ConfigService) => ({
         connection: {
           host: config.get('REDIS_HOST', 'localhost'),
-          port: config.get<number>('REDIS_PORT', 6380),
+          port: config.get<number>('REDIS_PORT', 6379),
         },
       }),
     }),
@@ -43,5 +45,7 @@ import { TelegramModule } from './telegram/telegram.module';
     PaymentModule,
     TelegramModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

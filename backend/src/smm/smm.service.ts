@@ -51,7 +51,7 @@ export class SmmService {
       },
     });
 
-    // Add to BulMQ queue
+    // Add to BullMQ queue
     await this.orderQueue.add('process-smm-order', { orderId: order.id });
 
     return order;

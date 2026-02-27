@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Users, TrendingUp, DollarSign, Gift, Copy, CheckCircle2, Share2, Award } from "lucide-react";
+import { Users, TrendingUp, DollarSign, Gift, Copy, CheckCircle2, Share2, Award, BookOpen, Crown, Shield, AlertCircle } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 const benefits = [
   { icon: DollarSign, title: "Hoa hồng cao", description: "Nhận 10-20% hoa hồng từ mọi giao dịch", color: "text-green-500", bg: "bg-green-500/10" },
@@ -18,6 +20,7 @@ const commissionTiers = [
 ];
 
 export default function PartnershipPage() {
+  const { isAdmin, isAgent, isMember, hasRole } = useAuth();
   const [copied, setCopied] = useState(false);
   const referralLink = "https://primeacc.com/ref/ABC123XYZ";
   const referralCode = "ABC123XYZ";
@@ -31,13 +34,86 @@ export default function PartnershipPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Chương trình Cộng tác viên 🤝</h1>
-        <p className="mt-2 text-muted-foreground">Kiếm tiền cùng PrimeAcc với hoa hồng hấp dẫn lên đến 20%.</p>
+        <div className="flex items-center space-x-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Chương trình Cộng tác viên</h1>
+          <Users className="h-7 w-7 text-primary" />
+          {isAdmin && <Crown className="h-6 w-6 text-yellow-500" />}
+          {isAgent && <Shield className="h-6 w-6 text-blue-500" />}
+        </div>
+        <p className="mt-2 text-muted-foreground">
+          Kiếm tiền cùng PrimeAcc với hoa hồng hấp dẫn lên đến 20%.
+          {isAdmin && " (Xem tất cả thống kê hệ thống)"}
+        </p>
       </div>
+
+      {/* Member-only: Upgrade to Agent Prompt */}
+      {isMember && (
+        <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/30">
+          <div className="flex items-center space-x-3 mb-4">
+            <AlertCircle className="h-8 w-8 text-orange-500" />
+            <div>
+              <h3 className="text-lg font-bold text-foreground">Nâng cấp lên Đại lý để sử dụng tính năng này</h3>
+              <p className="text-sm text-muted-foreground">Bạn cần có tài khoản Đại lý để tham gia chương trình cộng tác viên</p>
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3 mb-4">
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Hoa hồng</p>
+              <p className="text-2xl font-bold text-green-500">10-20%</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Thu nhập</p>
+              <p className="text-2xl font-bold text-blue-500">Thụ động</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Hỗ trợ</p>
+              <p className="text-2xl font-bold text-purple-500">24/7</p>
+            </div>
+          </div>
+          <button className="w-full rounded-xl bg-gradient-to-r from-orange-500 to-red-500 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-orange-500/30 cursor-pointer">
+            Nâng cấp ngay
+          </button>
+        </div>
+      )}
+
+      {/* Admin-only: System-wide Partnership Stats */}
+      {isAdmin && (
+        <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30">
+          <div className="flex items-center space-x-2 mb-4">
+            <Crown className="h-6 w-6 text-yellow-500" />
+            <h3 className="text-lg font-bold text-foreground">Thống kê hệ thống (Admin)</h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-4">
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Tổng đại lý</p>
+              <p className="text-2xl font-bold text-foreground">342</p>
+              <p className="text-xs text-green-500 mt-1">+12 tuần này</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Hoa hồng đã trả</p>
+              <p className="text-2xl font-bold text-foreground">45.2M đ</p>
+              <p className="text-xs text-blue-500 mt-1">Tháng này</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Doanh số từ ref</p>
+              <p className="text-2xl font-bold text-foreground">280M đ</p>
+              <p className="text-xs text-purple-500 mt-1">Tháng này</p>
+            </div>
+            <div className="glass rounded-xl p-4">
+              <p className="text-sm text-muted-foreground mb-1">Tỷ lệ chuyển đổi</p>
+              <p className="text-2xl font-bold text-foreground">18.5%</p>
+              <p className="text-xs text-green-500 mt-1">+2.3%</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
-          <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-cta/10 to-primary/10 border-2 border-cta/30">
+          {/* Only show referral section for Agents and Admins */}
+          {(isAgent || isAdmin) && (
+            <>
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-cta/10 to-primary/10 border-2 border-cta/30">
             <div className="flex items-center space-x-3 mb-6">
               <div className="glass rounded-xl p-3">
                 <Share2 className="h-6 w-6 text-cta" />
@@ -117,33 +193,41 @@ export default function PartnershipPage() {
             </div>
           </div>
 
-          <div className="glass-card rounded-2xl p-6">
-            <h3 className="text-lg font-bold text-foreground mb-4">Lịch sử hoa hồng</h3>
-            <div className="space-y-3">
-              {[
-                { user: "user123", amount: 45000, date: "25/02/2024", type: "Đơn SMM" },
-                { user: "user456", amount: 18000, date: "24/02/2024", type: "Mua tài khoản" },
-                { user: "user789", amount: 32000, date: "23/02/2024", type: "Đơn SMM" },
-              ].map((commission, i) => (
-                <div key={i} className="flex items-center justify-between glass rounded-xl p-4 border border-border">
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
-                      <DollarSign className="h-5 w-5 text-green-500" />
+          {/* Commission history - only for Agents and Admins */}
+          {(isAgent || isAdmin) && (
+            <div className="glass-card rounded-2xl p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4">Lịch sử hoa hồng</h3>
+              <div className="space-y-3">
+                {[
+                  { user: "user123", amount: 45000, date: "25/02/2024", type: "Đơn SMM" },
+                  { user: "user456", amount: 18000, date: "24/02/2024", type: "Mua tài khoản" },
+                  { user: "user789", amount: 32000, date: "23/02/2024", type: "Đơn SMM" },
+                ].map((commission, i) => (
+                  <div key={i} className="flex items-center justify-between glass rounded-xl p-4 border border-border">
+                    <div className="flex items-center space-x-4">
+                      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
+                        <DollarSign className="h-5 w-5 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{commission.user}</p>
+                        <p className="text-xs text-muted-foreground">{commission.type} • {commission.date}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{commission.user}</p>
-                      <p className="text-xs text-muted-foreground">{commission.type} • {commission.date}</p>
-                    </div>
+                    <p className="text-sm font-bold text-green-500">+{formatNumber(commission.amount)}đ</p>
                   </div>
-                  <p className="text-sm font-bold text-green-500">+{commission.amount.toLocaleString()}đ</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+            </>
+          )}
         </div>
 
         <div className="space-y-6">
-          <div className="glass-card rounded-2xl p-6">
+          {/* Stats sidebar - only for Agents and Admins */}
+          {(isAgent || isAdmin) && (
+            <>
+              <div className="glass-card rounded-2xl p-6">
             <h3 className="text-lg font-bold text-foreground mb-4">Thống kê của bạn</h3>
             <div className="space-y-4">
               <div className="glass rounded-xl p-4">
@@ -185,7 +269,10 @@ export default function PartnershipPage() {
           </div>
 
           <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-2 border-green-500/30">
-            <h3 className="text-lg font-bold text-foreground mb-2">💰 Rút hoa hồng</h3>
+            <div className="flex items-center space-x-2 mb-2">
+              <DollarSign className="h-5 w-5 text-green-500" />
+              <h3 className="text-lg font-bold text-foreground">Rút hoa hồng</h3>
+            </div>
             <p className="text-sm text-muted-foreground mb-4">Số dư khả dụng</p>
             <p className="text-3xl font-black text-foreground mb-4">1,250,000đ</p>
             <button className="w-full rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-green-500/30 cursor-pointer">
@@ -194,7 +281,10 @@ export default function PartnershipPage() {
           </div>
 
           <div className="glass-card rounded-2xl p-6">
-            <h3 className="text-lg font-bold text-foreground mb-4">📋 Hướng dẫn</h3>
+            <div className="flex items-center space-x-2 mb-4">
+              <BookOpen className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-bold text-foreground">Hướng dẫn</h3>
+            </div>
             <ol className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start space-x-2">
                 <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-cta/10 text-cta font-bold text-xs">1</span>
@@ -214,6 +304,8 @@ export default function PartnershipPage() {
               </li>
             </ol>
           </div>
+            </>
+          )}
         </div>
       </div>
     </div>
