@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  MEMBER
+  AGENT
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum TransactionType {
+  DEPOSIT
+  SMM_ORDER
+  ACCOUNT_PURCHASE
+  REFUND
+}
+
+model User {
+  id            String         @id @default(cuid())
+  username      String         @unique
+  email         String         @unique
+  password      String
+  role          Role           @default(MEMBER)
+  balance       Decimal        @default(0) @db.Decimal(20, 2)
+  pricingTier   Int            @default(1)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  orders        SmmOrder[]
+  purchases     AccountPurchase[]
+  transactions  Transaction[]
+  deposits      Deposit[]
+}
+
+model SmmProvider {
+  id        String       @id @default(cuid())
+  name      String
+  apiUrl    String
+  apiKey    String
+  type      String       @default("PERFECT_PANEL")
+  services  SmmService[]
+}
+
+model SmmCategory {
+  id        String       @id @default(cuid())
+  name      String
+  icon      String?      // e.g., "facebook", "tiktok"
+  services  SmmService[]
+}
+
+model SmmService {
+  id           String       @id @default(cuid())
+  name         String
+  description  String?
+  minAmount    Int
+  maxAmount    Int
+  price        Decimal      @db.Decimal(20, 2)
+  categoryId   String
+  category     SmmCategory  @relation(fields: [categoryId], references: [id])
+  providerId   String
+  provider     SmmProvider  @relation(fields: [providerId], references: [id])
+  providerServiceId String  // The ID on the provider's panel
+  orders       SmmOrder[]
+}
+
+model SmmOrder {
+  id               String      @id @default(cuid())
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+  serviceId        String
+  service          SmmService  @relation(fields: [serviceId], references: [id])
+  targetUrl        String
+  quantity         Int
+  charge           Decimal     @db.Decimal(20, 2)
+  status           OrderStatus @default(PENDING)
+  providerOrderId  String?
+  startCount       Int         @default(0)
+  remains          Int         @default(0)
+  errorResponse    String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model AccountCategory {
+  id        String           @id @default(cuid())
+  name      String
+  products  AccountProduct[]
+}
+
+model AccountProduct {
+  id           String           @id @default(cuid())
+  name         String
+  description  String?
+  price        Decimal          @db.Decimal(20, 2)
+  categoryId   String
+  category     AccountCategory  @relation(fields: [categoryId], references: [id])
+  stocks       AccountStock[]
+  purchases    AccountPurchase[]
+}
+
+model AccountStock {
+  id           String          @id @default(cuid())
+  productId    String
+  product      AccountProduct  @relation(fields: [productId], references: [id])
+  content      String          // email|pass or key
+  isSold       Boolean         @default(false)
+  lockedAt     DateTime?       // For Lock Stock logic
+  soldAt       DateTime?
+  purchaseId   String?         @unique
+  purchase     AccountPurchase? @relation(fields: [purchaseId], references: [id])
+}
+
+model AccountPurchase {
+  id          String         @id @default(cuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id])
+  productId   String
+  product     AccountProduct @relation(fields: [productId], references: [id])
+  stock       AccountStock?
+  price       Decimal        @db.Decimal(20, 2)
+  createdAt   DateTime       @default(now())
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  type        TransactionType
+  amount      Decimal         @db.Decimal(20, 2)
+  oldBalance  Decimal         @db.Decimal(20, 2)
+  newBalance  Decimal         @db.Decimal(20, 2)
+  description String?
+  referenceId String?         // Link to SmmOrder ID, AccountPurchase ID, or Deposit ID
+  createdAt   DateTime        @default(now())
+}
+
+model Deposit {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  amount        Decimal  @db.Decimal(20, 2)
+  method        String   // "SEPAY", "MOMO", etc.
+  transactionId String   @unique // The bank/sepay transaction reference
+  status        String   @default("COMPLETED")
+  createdAt     DateTime @default(now())
+}
