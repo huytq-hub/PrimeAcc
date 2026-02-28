@@ -17,7 +17,7 @@ start "PrimeAcc Backend" cmd /k "cd /d %~dp0backend && npm run start:dev"
 timeout /t 3 /nobreak > nul
 
 echo Starting Frontend Server...
-start "PrimeAcc Frontend" cmd /k "cd /d %~dp0frontend && node run-dev.js"
+start "PrimeAcc Frontend" cmd /k "cd /d %~dp0frontend && npm run dev"
 
 echo.
 echo ========================================

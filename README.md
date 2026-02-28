@@ -51,9 +51,9 @@
 git clone https://github.com/yourusername/primeacc.git
 cd primeacc
 
-# Cài đặt dependencies
-cd backend && npm install
-cd ../frontend && npm install
+# Cài đặt dependencies cho cả backend và frontend
+npm install
+npm run install:all
 ```
 
 ### Cấu hình
@@ -67,23 +67,33 @@ cp env.example .env
 
 ### Chạy ứng dụng
 
-**Cách 1: Docker (Khuyến nghị)**
+**Cách 1: Docker chỉ Database + Local Backend/Frontend (Khuyến nghị cho Windows)**
+```bash
+# Start database và redis
+docker-compose -f docker-compose.db.yml up -d
+
+# Chạy backend và frontend local
+npm run dev
+```
+
+**Cách 2: Docker Full Stack**
 ```bash
 docker-compose up
 ```
 
-**Cách 2: Chạy riêng lẻ**
+**Cách 3: Chạy riêng lẻ**
 ```bash
+# Start database trước
+docker-compose -f docker-compose.db.yml up -d
+
 # Terminal 1 - Backend
-cd backend
-npm run start:dev
+npm run dev:backend
 
 # Terminal 2 - Frontend
-cd frontend
-npm run dev
+npm run dev:frontend
 ```
 
-**Cách 3: Windows batch file**
+**Cách 4: Windows batch file**
 ```bash
 start-all.bat
 ```
@@ -95,13 +105,15 @@ start-all.bat
 
 ## 📚 Tài liệu
 
+**🚀 Deploy lên AWS:** [AWS_DEPLOY.md](AWS_DEPLOY.md) - Hướng dẫn deploy đơn giản
+
 ### Hướng dẫn cơ bản
 - [Docker Guide](docs/DOCKER_GUIDE.md) - Chạy với Docker
 - [Deposit Flow](docs/DEPOSIT_FLOW.md) - Luồng nạp tiền chi tiết
 - [Shop Feature](docs/SHOP_FEATURE.md) - Tính năng mua tài khoản
 
 ### Deployment
-- [AWS Deployment](docs/AWS_DEPLOYMENT.md) - Deploy lên AWS EC2/ECS
+- [AWS Deployment](docs/AWS_DEPLOYMENT.md) - Deploy lên AWS EC2/ECS (chi tiết)
 - [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md) - Checklist đầy đủ
 
 ### Cấu hình Sepay
@@ -199,35 +211,59 @@ cd frontend
 npm run test
 ```
 
-## 📦 Seed Database
+## 📦 Database Management
 
-Tạo dữ liệu mẫu (categories, products, stocks):
+### Prisma Migrations
+
+**Sau khi cập nhật schema trong `backend/prisma/schema.prisma`, BẮT BUỘC chạy:**
 
 ```bash
-cd backend
+# Từ root folder
+npm run prisma:migrate
+```
+
+Lệnh này sẽ:
+- Tạo migration file từ thay đổi schema
+- Apply migration vào database
+- Tự động regenerate Prisma Client
+
+**Các lệnh khác:**
+
+```bash
+# Chỉ regenerate Prisma Client (không tạo migration)
+npm run prisma:generate
+
+# Seed dữ liệu mẫu
 npm run prisma:seed
 ```
 
 ## 🚢 Deployment
 
-### Production với Docker
-
-```bash
-# Build và chạy production containers
-docker-compose -f docker-compose.prod.yml up -d --build
-```
-
 ### Deploy lên AWS
 
-Xem hướng dẫn chi tiết: [AWS Deployment Guide](docs/AWS_DEPLOYMENT.md)
+```bash
+# 1. SSH vào EC2
+ssh -i your-key.pem ubuntu@YOUR_EC2_IP
 
-## 🤝 Contributing
+# 2. Install Docker
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker ubuntu
 
-1. Fork repository
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Tạo Pull Request
+# 3. Clone & configure
+git clone <repo-url>
+cd primeacc
+cp .env.production.example .env.production
+nano .env.production  # Điền thông tin
+
+# 4. Deploy
+chmod +x deploy.sh
+./deploy.sh
+
+# 5. Lấy IP và config webhook Sepay
+curl ifconfig.me
+```
+
+Xem chi tiết: [AWS_DEPLOY.md](AWS_DEPLOY.md)
 
 ## 📝 License
 
