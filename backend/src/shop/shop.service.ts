@@ -9,6 +9,47 @@ export class ShopService {
     private userService: UserService,
   ) {}
 
+  async getProducts() {
+    const products = await this.prisma.accountProduct.findMany({
+      include: {
+        category: true,
+        _count: {
+          select: {
+            stocks: {
+              where: {
+                isSold: false,
+                OR: [
+                  { lockedAt: null },
+                  { lockedAt: { lt: new Date(Date.now() - 5 * 60 * 1000) } },
+                ],
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: Number(product.price),
+      category: product.category.name,
+      categoryId: product.categoryId,
+      stock: product._count.stocks,
+    }));
+  }
+
+  async getCategories() {
+    return this.prisma.accountCategory.findMany({
+      include: {
+        _count: {
+          select: { products: true },
+        },
+      },
+    });
+  }
+
   async buyAccount(userId: string, productId: string) {
     return this.prisma.$transaction(async (tx) => {
       // 1. Get product and check price

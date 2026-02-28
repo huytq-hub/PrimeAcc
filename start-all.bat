@@ -12,12 +12,12 @@ pause > nul
 
 echo.
 echo Starting Backend Server...
-start "PrimeAcc Backend" cmd /k "cd backend && node run-dev.js"
+start "PrimeAcc Backend" cmd /k "cd /d %~dp0backend && npm run start:dev"
 
 timeout /t 3 /nobreak > nul
 
 echo Starting Frontend Server...
-start "PrimeAcc Frontend" cmd /k "cd frontend && node run-dev.js"
+start "PrimeAcc Frontend" cmd /k "cd /d %~dp0frontend && node run-dev.js"
 
 echo.
 echo ========================================

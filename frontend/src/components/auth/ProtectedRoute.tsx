@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { AuthLoadingSpinner } from "./AuthLoadingSpinner";
+import { AuthLoadingSpinner } from "@/components/auth/AuthLoadingSpinner";
 import type { UserRole } from "@/types/auth";
 
 interface ProtectedRouteProps {
