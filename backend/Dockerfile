@@ -1,5 +1,8 @@
 FROM node:24-alpine
 
+# Disable npm update notifications
+ENV NPM_CONFIG_UPDATE_NOTIFIER=false
+
 WORKDIR /app
 
 # Copy package files

@@ -1,5 +1,8 @@
 FROM node:24-alpine AS base
 
+# Disable npm update notifications
+ENV NPM_CONFIG_UPDATE_NOTIFIER=false
+
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
