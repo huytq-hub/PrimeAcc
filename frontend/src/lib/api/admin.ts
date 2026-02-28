@@ -84,27 +84,32 @@ export const adminApi = {
     search?: string;
     role?: string;
   }): Promise<{ users: User[]; total: number; page: number; totalPages: number }> => {
-    const response = await apiClient.get('/admin/users', { params });
-    return response.data;
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.search) queryParams.append('search', params.search);
+    if (params?.role) queryParams.append('role', params.role);
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/admin/users?${queryString}` : '/admin/users';
+    
+    return apiClient.get(endpoint);
   },
 
   updateUserBalance: async (
     userId: string,
     data: { amount: number; type: 'ADD' | 'SUBTRACT'; note?: string }
   ) => {
-    const response = await apiClient.put(`/admin/users/${userId}/balance`, data);
-    return response.data;
+    return apiClient.put(`/admin/users/${userId}/balance`, data);
   },
 
   updateUserRole: async (userId: string, role: 'MEMBER' | 'AGENT' | 'ADMIN') => {
-    const response = await apiClient.put(`/admin/users/${userId}/role`, { role });
-    return response.data;
+    return apiClient.put(`/admin/users/${userId}/role`, { role });
   },
 
   // Products
   getProducts: async (): Promise<Product[]> => {
-    const response = await apiClient.get('/admin/products');
-    return response.data;
+    return apiClient.get<Product[]>('/admin/products');
   },
 
   createProduct: async (data: {
@@ -113,31 +118,26 @@ export const adminApi = {
     price: number;
     categoryId: string;
   }) => {
-    const response = await apiClient.post('/admin/products', data);
-    return response.data;
+    return apiClient.post('/admin/products', data);
   },
 
   updateProduct: async (
     productId: string,
     data: { name?: string; description?: string; price?: number }
   ) => {
-    const response = await apiClient.put(`/admin/products/${productId}`, data);
-    return response.data;
+    return apiClient.put(`/admin/products/${productId}`, data);
   },
 
   deleteProduct: async (productId: string) => {
-    const response = await apiClient.delete(`/admin/products/${productId}`);
-    return response.data;
+    return apiClient.delete(`/admin/products/${productId}`);
   },
 
   addStock: async (productId: string, content: string) => {
-    const response = await apiClient.post(`/admin/products/${productId}/stock`, { content });
-    return response.data;
+    return apiClient.post(`/admin/products/${productId}/stock`, { content });
   },
 
   addBulkStock: async (productId: string, stocks: string[]) => {
-    const response = await apiClient.post(`/admin/products/${productId}/stock/bulk`, { stocks });
-    return response.data;
+    return apiClient.post(`/admin/products/${productId}/stock/bulk`, { stocks });
   },
 
   // Transactions
@@ -146,8 +146,15 @@ export const adminApi = {
     limit?: number;
     type?: string;
   }): Promise<{ transactions: Transaction[]; total: number; page: number; totalPages: number }> => {
-    const response = await apiClient.get('/admin/transactions', { params });
-    return response.data;
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.type) queryParams.append('type', params.type);
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/admin/transactions?${queryString}` : '/admin/transactions';
+    
+    return apiClient.get(endpoint);
   },
 
   // Withdrawals
