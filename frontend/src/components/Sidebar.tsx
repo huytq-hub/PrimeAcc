@@ -15,11 +15,13 @@ import {
   Moon,
   Sun,
   LogOut,
-  User
+  User,
+  Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
+import AnimatedBalance from "@/components/AnimatedBalance";
 
 const menuItems = [
   { icon: LayoutDashboard, name: "Trang chủ", href: "/dashboard" },
@@ -56,6 +58,9 @@ export default function Sidebar() {
         return "bg-muted text-muted-foreground border-border";
     }
   };
+
+  // Show admin link only for ADMIN role
+  const isAdmin = user?.role === "ADMIN";
 
   return (
     <aside className="fixed left-0 top-0 hidden h-screen w-64 flex-col border-r border-border glass-card lg:flex">
@@ -101,6 +106,25 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Admin Panel Link - Only visible for ADMIN */}
+        {isAdmin && (
+          <>
+            <div className="my-2 border-t border-border" />
+            <Link
+              href="/admin"
+              className={cn(
+                "flex items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium transition-all cursor-pointer",
+                pathname?.startsWith("/admin")
+                  ? "bg-red-500 text-white shadow-lg shadow-red-500/20" 
+                  : "text-red-500 hover:bg-red-500/10 border border-red-500/20"
+              )}
+            >
+              <Shield className="h-5 w-5" />
+              <span>Admin Panel</span>
+            </Link>
+          </>
+        )}
       </nav>
 
       <div className="border-t border-border p-4">
@@ -134,17 +158,34 @@ export default function Sidebar() {
 
         {/* Balance Section */}
         <div className="glass rounded-2xl p-4 relative overflow-hidden mt-3">
-          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-cta/10 blur-2xl" />
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Số dư của bạn</p>
-          <p className="mt-2 text-2xl font-bold text-foreground">
-            {user?.balance?.toLocaleString('vi-VN') || '0'}đ
-          </p>
-          <div className="mt-3 h-1.5 w-full rounded-full bg-border overflow-hidden">
-            <div className="h-full w-3/4 bg-gradient-to-r from-cta to-primary rounded-full" />
+          <div 
+            className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-cta/10 blur-2xl transition-all duration-700"
+            style={{
+              animation: user?.balance ? 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none'
+            }}
+          />
+          <div className="absolute -left-8 -bottom-8 h-24 w-24 rounded-full bg-primary/10 blur-2xl transition-all duration-700" />
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider relative z-10">Số dư của bạn</p>
+          <div className="mt-2 text-2xl font-bold relative z-10">
+            <AnimatedBalance 
+              value={user?.balance ?? 0} 
+              duration={500}
+              className="text-foreground"
+            />
           </div>
-          <button className="mt-3 w-full rounded-xl bg-cta text-cta-foreground py-2 text-sm font-semibold hover:bg-cta/90 cursor-pointer">
-            Nạp tiền ngay
-          </button>
+          <div className="mt-3 h-1.5 w-full rounded-full bg-border overflow-hidden relative z-10">
+            <div 
+              className="h-full bg-gradient-to-r from-cta to-primary rounded-full transition-all duration-700 ease-out" 
+              style={{ 
+                width: `${Math.min(((user?.balance ?? 0) / 10000000) * 100, 100)}%` 
+              }}
+            />
+          </div>
+          <Link href="/dashboard/deposit">
+            <button className="mt-3 w-full rounded-xl bg-cta text-cta-foreground py-2 text-sm font-semibold hover:bg-cta/90 transition-all duration-300 cursor-pointer relative z-10">
+              Nạp tiền ngay
+            </button>
+          </Link>
         </div>
       </div>
     </aside>

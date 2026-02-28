@@ -11,6 +11,8 @@ import { SmmModule } from './smm/smm.module';
 import { ShopModule } from './shop/shop.module';
 import { PaymentModule } from './payment/payment.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { ReferralModule } from './referral/referral.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { TelegramModule } from './telegram/telegram.module';
     ShopModule,
     PaymentModule,
     TelegramModule,
+    ReferralModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

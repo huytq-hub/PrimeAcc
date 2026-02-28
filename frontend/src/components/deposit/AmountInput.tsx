@@ -47,13 +47,13 @@ export function AmountInput({
           value={value ? formatNumber(numValue) : ""}
           onChange={handleChange}
           onBlur={handleBlur}
-          className={`h-[72px] w-full rounded-xl border-2 glass pl-4 pr-16 text-2xl font-bold placeholder:text-muted-foreground focus:outline-none transition-all duration-300 ${
+          className={`h-14 sm:h-16 lg:h-[72px] w-full rounded-xl border-2 glass pl-4 pr-16 text-xl sm:text-2xl font-bold placeholder:text-muted-foreground focus:outline-none transition-all duration-300 ${
             isInvalid
               ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_0_6px_rgba(239,68,68,0.1)]"
               : "border-primary/20 focus:border-primary focus:shadow-[0_0_0_6px_rgba(124,58,237,0.1)] focus:scale-[1.01]"
           }`}
         />
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold text-sm sm:text-base">
           VNĐ
         </span>
       </div>
@@ -69,7 +69,7 @@ export function AmountInput({
         </div>
       )}
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {presets.map((preset) => (
           <button
             key={preset}
@@ -77,7 +77,7 @@ export function AmountInput({
               onChange(preset.toString());
               setTouched(true);
             }}
-            className={`rounded-lg glass border py-2.5 text-sm font-semibold transition-all duration-200 cursor-pointer ${
+            className={`rounded-lg glass border py-2.5 text-sm font-semibold transition-all duration-200 cursor-pointer min-h-[44px] active:scale-95 ${
               value === preset.toString()
                 ? "border-primary bg-primary/10 text-primary scale-105 shadow-md"
                 : "border-border text-foreground hover:border-primary/30 hover:bg-primary/5 hover:scale-105"

@@ -50,7 +50,7 @@ class ApiClient {
 
   constructor() {
     // Get base URL from environment variable or use default
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
   }
 
   /**

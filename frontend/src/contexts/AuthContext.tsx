@@ -137,13 +137,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (
     username: string,
     email: string,
-    password: string
+    password: string,
+    referralCode?: string
   ): Promise<void> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await authApi.register({ username, email, password });
+      const response = await authApi.register({ username, email, password, referralCode });
       
       // Registration successful, but user needs to login
       // Don't automatically authenticate after registration
@@ -179,6 +180,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     authApi.logout().catch(err => {
       console.error("Logout API call failed:", err);
     });
+  };
+
+  /**
+   * Refreshes the current user's data from the server
+   * 
+   * Useful after operations that change user balance or profile data.
+   * 
+   * @example
+   * await refreshUser();
+   * // User data is now updated with latest from server
+   */
+  const refreshUser = async (): Promise<void> => {
+    try {
+      const userData = await authApi.getProfile();
+      setUser(userData);
+    } catch (err) {
+      console.error("Failed to refresh user data:", err);
+    }
   };
 
   /**
@@ -223,6 +242,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         clearError,
+        refreshUser,
         hasRole,
         isAdmin,
         isAgent,

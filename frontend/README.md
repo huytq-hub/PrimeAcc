@@ -12,13 +12,13 @@ Create a `.env.local` file in the `frontend` directory with the following variab
 
 ```env
 # API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
 **Environment Variables:**
 
 - `NEXT_PUBLIC_API_URL`: Base URL for the backend API
-  - **Development**: `http://localhost:3001`
+  - **Development**: `http://localhost:3000`
   - **Production**: Update with your production API URL (e.g., `https://api.primeacc.com`)
   - **Note**: The `NEXT_PUBLIC_` prefix makes this variable accessible in the browser
 

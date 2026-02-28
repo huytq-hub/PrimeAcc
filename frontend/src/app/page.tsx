@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Shield, Zap, Users, TrendingUp, Star, CheckCircle2, ExternalLink, Facebook, Instagram, Youtube } from "lucide-react";
+import { ArrowRight, Sparkles, Shield, Zap, Users, TrendingUp, Star, CheckCircle2, ExternalLink, Facebook, Instagram, Youtube, Menu, X } from "lucide-react";
 
 const features = [
   {
@@ -49,17 +50,19 @@ const services = [
 ];
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
       <nav className="fixed top-4 left-4 right-4 z-50 glass-card rounded-2xl border border-border">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cta to-primary text-white">
                 <Sparkles className="h-6 w-6" />
               </div>
-              <span className="text-2xl font-bold">
+              <span className="text-xl sm:text-2xl font-bold">
                 <span className="text-primary">PRIME</span>
                 <span className="text-foreground">ACC</span>
               </span>
@@ -77,7 +80,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="hidden md:flex items-center space-x-3">
               <Link href="/login" className="rounded-xl px-4 py-2 text-sm font-semibold text-foreground hover:bg-accent transition-all cursor-pointer">
                 Đăng nhập
               </Link>
@@ -85,22 +88,84 @@ export default function Home() {
                 Bắt đầu ngay
               </Link>
             </div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6 text-foreground" />
+              ) : (
+                <Menu className="h-6 w-6 text-foreground" />
+              )}
+            </button>
           </div>
         </div>
       </nav>
 
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
+          <div className="fixed top-20 left-4 right-4 glass-card rounded-2xl border border-border p-6 animate-in slide-in-from-top-4 duration-200">
+            <div className="flex flex-col space-y-4">
+              <Link 
+                href="#features" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-foreground hover:text-primary transition-colors cursor-pointer py-3 px-4 rounded-lg hover:bg-muted"
+              >
+                Tính năng
+              </Link>
+              <Link 
+                href="#services" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-foreground hover:text-primary transition-colors cursor-pointer py-3 px-4 rounded-lg hover:bg-muted"
+              >
+                Dịch vụ
+              </Link>
+              <Link 
+                href="#pricing" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-foreground hover:text-primary transition-colors cursor-pointer py-3 px-4 rounded-lg hover:bg-muted"
+              >
+                Bảng giá
+              </Link>
+              <div className="border-t border-border pt-4 space-y-3">
+                <Link 
+                  href="/login" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-center rounded-xl px-4 py-3 text-sm font-semibold text-foreground bg-muted hover:bg-muted/80 transition-all cursor-pointer"
+                >
+                  Đăng nhập
+                </Link>
+                <Link 
+                  href="/dashboard" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-center rounded-xl bg-gradient-to-r from-cta to-primary px-4 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-cta/30 transition-all cursor-pointer"
+                >
+                  Bắt đầu ngay
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 overflow-hidden">
         <div className="absolute top-40 left-20 h-96 w-96 rounded-full bg-cta/10 blur-3xl" />
         <div className="absolute bottom-20 right-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
         
         <div className="container mx-auto max-w-6xl relative z-10">
-          <div className="text-center space-y-8">
-            <div className="inline-flex items-center space-x-2 glass rounded-full px-4 py-2 border border-border">
+          <div className="text-center space-y-6 sm:space-y-8">
+            <div className="inline-flex items-center space-x-2 glass rounded-full px-3 sm:px-4 py-2 border border-border">
               <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-              <span className="text-sm font-semibold text-foreground">Được tin dùng bởi 50,000+ khách hàng</span>
+              <span className="text-xs sm:text-sm font-semibold text-foreground">Được tin dùng bởi 50,000+ khách hàng</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-foreground leading-tight px-4">
               Nền tảng dịch vụ <br />
               <span className="bg-gradient-to-r from-cta to-primary bg-clip-text text-transparent">
                 SMM & Premium
@@ -109,26 +174,26 @@ export default function Home() {
               hàng đầu Việt Nam
             </h1>
 
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Tăng tương tác mạng xã hội và mua tài khoản premium với giá tốt nhất. 
               Giao dịch tự động 24/7, bảo mật tuyệt đối.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/dashboard" className="group flex items-center space-x-2 rounded-xl bg-gradient-to-r from-cta to-primary px-8 py-4 text-lg font-bold text-white hover:shadow-2xl hover:shadow-cta/30 transition-all cursor-pointer">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
+              <Link href="/dashboard" className="w-full sm:w-auto group flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-cta to-primary px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-white hover:shadow-2xl hover:shadow-cta/30 transition-all cursor-pointer min-h-[48px]">
                 <span>Bắt đầu miễn phí</span>
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="#features" className="flex items-center space-x-2 rounded-xl glass border border-border px-8 py-4 text-lg font-semibold text-foreground hover:border-primary/30 transition-all cursor-pointer">
+              <Link href="#features" className="w-full sm:w-auto flex items-center justify-center space-x-2 rounded-xl glass border border-border px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-foreground hover:border-primary/30 transition-all cursor-pointer min-h-[48px]">
                 <span>Tìm hiểu thêm</span>
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 pt-8 sm:pt-12">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <p className="text-4xl font-black text-foreground">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+                  <p className="text-2xl sm:text-4xl font-black text-foreground">{stat.value}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -210,7 +275,7 @@ export default function Home() {
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 PrimeAcc. All rights reserved.
+              © 2026 PrimeAcc. All rights reserved.
             </p>
           </div>
         </div>

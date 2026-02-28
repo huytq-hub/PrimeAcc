@@ -19,17 +19,17 @@ const recentOrders = [
 export default function DashboardPage() {
   const { user, isAdmin, isAgent, isMember } = useAuth();
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <div className="flex items-center space-x-2">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Chào mừng trở lại{user?.username ? `, ${user.username}` : ""}!
           </h1>
-          <Sparkles className="h-7 w-7 text-yellow-500" />
-          {isAdmin && <Crown className="h-7 w-7 text-yellow-500" />}
-          {isAgent && <Shield className="h-7 w-7 text-blue-500" />}
+          <Sparkles className="h-6 sm:h-7 w-6 sm:w-7 text-yellow-500" />
+          {isAdmin && <Crown className="h-6 sm:h-7 w-6 sm:w-7 text-yellow-500" />}
+          {isAgent && <Shield className="h-6 sm:h-7 w-6 sm:w-7 text-blue-500" />}
         </div>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Theo dõi hoạt động và quản lý các đơn hàng của bạn.
           {isAdmin && " (Chế độ quản trị viên)"}
           {isAgent && " (Chế độ đại lý)"}
@@ -92,38 +92,38 @@ export default function DashboardPage() {
 
       {/* Member-only Upgrade Prompt */}
       {isMember && (
-        <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30">
-          <div className="flex items-center justify-between">
+        <div className="glass-card rounded-2xl p-4 sm:p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
-              <div className="glass rounded-xl p-3">
+              <div className="glass rounded-xl p-3 flex-shrink-0">
                 <Users className="h-6 w-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-foreground">Nâng cấp lên Đại lý</h3>
-                <p className="text-sm text-muted-foreground">Kiếm thêm thu nhập với hoa hồng lên đến 20%</p>
+                <h3 className="text-base sm:text-lg font-bold text-foreground">Nâng cấp lên Đại lý</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Kiếm thêm thu nhập với hoa hồng lên đến 20%</p>
               </div>
             </div>
-            <button className="rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer">
+            <button className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer min-h-[48px] active:scale-95 transition-all">
               Tìm hiểu thêm
             </button>
           </div>
         </div>
       )}
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="group relative overflow-hidden glass-card rounded-2xl p-6 transition-all hover:shadow-xl hover:shadow-primary/5 cursor-pointer">
+          <div key={stat.label} className="group relative overflow-hidden glass-card rounded-2xl p-4 sm:p-6 transition-all hover:shadow-xl hover:shadow-primary/5 cursor-pointer active:scale-[0.98]">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                <p className="mt-2 text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">{stat.label}</p>
+                <p className="mt-2 text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
                 <div className="mt-2 flex items-center space-x-1">
                   <ArrowUpRight className="h-3 w-3 text-green-500" />
                   <span className="text-xs font-semibold text-green-500">{stat.change}</span>
                 </div>
               </div>
-              <div className={`rounded-xl ${stat.bg} p-3 transition-transform group-hover:scale-110`}>
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
+              <div className={`rounded-xl ${stat.bg} p-2 sm:p-3 transition-transform group-hover:scale-110`}>
+                <stat.icon className={`h-5 sm:h-6 w-5 sm:w-6 ${stat.color}`} />
               </div>
             </div>
             <div className={`absolute -right-8 -bottom-8 h-24 w-24 rounded-full ${stat.bg} blur-2xl opacity-50`} />
@@ -131,29 +131,29 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <section className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 glass-card rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-foreground">Đơn hàng mới nhất</h3>
-            <button className="text-sm font-semibold text-cta hover:text-cta/80 cursor-pointer">
+      <section className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 glass-card rounded-2xl p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h3 className="text-base sm:text-lg font-bold text-foreground">Đơn hàng mới nhất</h3>
+            <button className="text-xs sm:text-sm font-semibold text-cta hover:text-cta/80 cursor-pointer min-h-[44px] flex items-center active:scale-95 transition-all">
               Xem tất cả →
             </button>
           </div>
           
           <div className="space-y-3">
             {recentOrders.map((order) => (
-              <div key={order.id} className="flex items-center justify-between rounded-xl border border-border glass p-4 transition-all hover:border-primary/30 cursor-pointer">
-                <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cta/20 to-primary/20 flex items-center justify-center">
+              <div key={order.id} className="flex items-center justify-between rounded-xl border border-border glass p-3 sm:p-4 transition-all hover:border-primary/30 cursor-pointer active:scale-[0.98]">
+                <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cta/20 to-primary/20 flex items-center justify-center flex-shrink-0">
                     <TrendingUp className="h-5 w-5 text-cta" />
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{order.service}</p>
-                    <p className="text-xs text-muted-foreground">ID: {order.id} • {order.date}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm font-semibold text-foreground truncate">{order.service}</p>
+                    <p className="text-xs text-muted-foreground truncate">ID: {order.id} • {order.date}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-bold text-foreground">{order.amount}</p>
+                <div className="text-right flex-shrink-0 ml-2">
+                  <p className="text-xs sm:text-sm font-bold text-foreground whitespace-nowrap">{order.amount}</p>
                   <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
                     order.status === 'completed' 
                       ? 'bg-green-500/10 text-green-500' 
@@ -167,31 +167,31 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="glass-card rounded-2xl p-6">
-          <div className="flex items-center space-x-2 mb-6">
-            <h3 className="text-lg font-bold text-foreground">Gợi ý dịch vụ</h3>
+        <div className="glass-card rounded-2xl p-4 sm:p-6">
+          <div className="flex items-center space-x-2 mb-4 sm:mb-6">
+            <h3 className="text-base sm:text-lg font-bold text-foreground">Gợi ý dịch vụ</h3>
             <Flame className="h-5 w-5 text-orange-500" />
           </div>
           
           <div className="space-y-4">
-            <div className="glass rounded-xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4 cursor-pointer hover:border-blue-500/40 transition-all">
+            <div className="glass rounded-xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-4 cursor-pointer hover:border-blue-500/40 transition-all active:scale-[0.98]">
               <div className="flex items-start justify-between mb-2">
-                <p className="font-bold text-blue-600 dark:text-blue-400">TikTok Follow (Global)</p>
-                <span className="rounded-full bg-blue-500 px-2 py-0.5 text-[10px] font-bold text-white">HOT</span>
+                <p className="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400">TikTok Follow (Global)</p>
+                <span className="rounded-full bg-blue-500 px-2 py-0.5 text-[10px] font-bold text-white flex-shrink-0">HOT</span>
               </div>
               <p className="text-xs text-muted-foreground mb-3">Dịch vụ đang Hot nhất trong tuần qua.</p>
-              <button className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 py-2 text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-blue-500/30">
+              <button className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 py-2.5 text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-blue-500/30 min-h-[44px] active:scale-95">
                 Sử dụng ngay
               </button>
             </div>
             
-            <div className="glass rounded-xl border border-red-500/20 bg-gradient-to-br from-red-500/10 to-orange-500/10 p-4 cursor-pointer hover:border-red-500/40 transition-all">
+            <div className="glass rounded-xl border border-red-500/20 bg-gradient-to-br from-red-500/10 to-orange-500/10 p-4 cursor-pointer hover:border-red-500/40 transition-all active:scale-[0.98]">
               <div className="flex items-start justify-between mb-2">
-                <p className="font-bold text-red-600 dark:text-red-400">Youtube Views</p>
-                <Clock className="h-4 w-4 text-red-500" />
+                <p className="text-sm sm:text-base font-bold text-red-600 dark:text-red-400">Youtube Views</p>
+                <Clock className="h-4 w-4 text-red-500 flex-shrink-0" />
               </div>
               <p className="text-xs text-muted-foreground mb-3">Tốc độ ổn định, không tụt.</p>
-              <button className="w-full rounded-lg bg-gradient-to-r from-red-500 to-red-600 py-2 text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-red-500/30">
+              <button className="w-full rounded-lg bg-gradient-to-r from-red-500 to-red-600 py-2.5 text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-red-500/30 min-h-[44px] active:scale-95">
                 Sử dụng ngay
               </button>
             </div>

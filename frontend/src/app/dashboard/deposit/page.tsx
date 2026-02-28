@@ -166,9 +166,9 @@ export default function DepositPage() {
                       setAmount("50000000");
                     }
                   }}
-                  className="h-[72px] w-full rounded-xl border-2 border-primary/20 glass pl-4 pr-16 text-2xl font-bold placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-[0_0_0_6px_rgba(124,58,237,0.1)] focus:scale-[1.01] transition-all duration-300"
+                  className="h-14 sm:h-16 lg:h-[72px] w-full rounded-xl border-2 border-primary/20 glass pl-4 pr-16 text-xl sm:text-2xl font-bold placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-[0_0_0_6px_rgba(124,58,237,0.1)] focus:scale-[1.01] transition-all duration-300"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">VNĐ</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold text-sm sm:text-base">VNĐ</span>
               </div>
 
               {amount && (parseInt(amount) < 10000 || parseInt(amount) > 50000000) && (
@@ -250,7 +250,7 @@ export default function DepositPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="flex flex-col items-center space-y-4">
-                  <div className={`relative p-4 rounded-2xl bg-white transition-all duration-300 ${
+                  <div className={`relative p-3 sm:p-4 rounded-2xl bg-white transition-all duration-300 w-full max-w-[280px] mx-auto ${
                     qrExpired ? "opacity-50 grayscale" : ""
                   }`}>
                     <Image
@@ -258,11 +258,11 @@ export default function DepositPage() {
                       alt="QR Code thanh toán"
                       width={240}
                       height={240}
-                      className="rounded-xl"
+                      className="rounded-xl w-full h-auto"
                       unoptimized
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground text-center">
+                  <p className="text-xs text-muted-foreground text-center px-4">
                     Quét mã QR bằng app ngân hàng để thanh toán
                   </p>
                 </div>
@@ -270,42 +270,45 @@ export default function DepositPage() {
                 <div className="space-y-3">
                   <div className="glass rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">Ngân hàng</p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-lg font-bold text-foreground">{qrData.bankInfo.bank}</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-base sm:text-lg font-bold text-foreground truncate">{qrData.bankInfo.bank}</p>
                       <button
                         onClick={() => handleCopy(qrData.bankInfo.bank, "bank")}
-                        className="text-cta hover:text-cta/80 transition-all duration-200 cursor-pointer relative"
+                        className="text-cta hover:text-cta/80 transition-all duration-200 cursor-pointer p-2 rounded-lg hover:bg-muted min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 active:scale-95"
+                        aria-label="Copy bank name"
                       >
-                        {copied === "bank" ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                        {copied === "bank" ? <CheckCircle2 className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                       </button>
                     </div>
                   </div>
 
                   <div className="glass rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">Số tài khoản</p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-lg font-bold text-foreground">{qrData.bankInfo.accountNumber}</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-base sm:text-lg font-bold text-foreground">{qrData.bankInfo.accountNumber}</p>
                       <button
                         onClick={() => handleCopy(qrData.bankInfo.accountNumber, "account")}
-                        className="text-cta hover:text-cta/80 transition-all duration-200 cursor-pointer"
+                        className="text-cta hover:text-cta/80 transition-all duration-200 cursor-pointer p-2 rounded-lg hover:bg-muted min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 active:scale-95"
+                        aria-label="Copy account number"
                       >
-                        {copied === "account" ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                        {copied === "account" ? <CheckCircle2 className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                       </button>
                     </div>
                   </div>
 
                   <div className="glass rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">Chủ tài khoản</p>
-                    <p className="text-lg font-bold text-foreground">{qrData.bankInfo.accountName}</p>
+                    <p className="text-base sm:text-lg font-bold text-foreground">{qrData.bankInfo.accountName}</p>
                   </div>
 
                   <div className="glass rounded-xl p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/30">
                     <p className="text-xs text-muted-foreground mb-1">Nội dung chuyển khoản (BẮT BUỘC)</p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-xl font-black text-foreground">{qrData.bankInfo.transferContent}</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-lg sm:text-xl font-black text-foreground break-all">{qrData.bankInfo.transferContent}</p>
                       <button
                         onClick={() => handleCopy(qrData.bankInfo.transferContent, "content")}
-                        className="text-cta hover:text-cta/80 transition-all duration-200 cursor-pointer"
+                        className="text-cta hover:text-cta/80 transition-all duration-200 cursor-pointer p-2 rounded-lg hover:bg-muted min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 active:scale-95"
+                        aria-label="Copy transfer content"
                       >
                         {copied === "content" ? <CheckCircle2 className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                       </button>

@@ -9,7 +9,12 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: any) {
-    return this.authService.register(body.username, body.email, body.password);
+    return this.authService.register(
+      body.username, 
+      body.email, 
+      body.password,
+      body.referralCode, // Optional referral code
+    );
   }
 
   @Throttle({ default: { limit: 5, ttl: 60 } }) // Limit 5 login attempts per minute
@@ -21,6 +26,14 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    // Return full user object with id, username, email, role, balance
+    // Convert Decimal to number for balance
+    return {
+      id: req.user.userId,
+      username: req.user.username,
+      email: req.user.email,
+      role: req.user.role,
+      balance: req.user.balance ? Number(req.user.balance) : 0
+    };
   }
 }

@@ -13,8 +13,15 @@ async function bootstrap() {
     transform: true,
   }));
 
+  const isProd = process.env.NODE_ENV === 'production';
+  const defaultOrigins = ['http://localhost:3003', 'http://127.0.0.1:3003'];
+  const envOrigins = (process.env.CORS_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: ['http://localhost:3003'],
+    origin: envOrigins.length > 0 ? envOrigins : (isProd ? defaultOrigins : true),
     credentials: true,
   });
   

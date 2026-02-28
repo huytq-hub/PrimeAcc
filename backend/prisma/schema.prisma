@@ -28,6 +28,20 @@ enum TransactionType {
   REFUND
 }
 
+enum CommissionStatus {
+  PENDING
+  APPROVED
+  PAID
+  CANCELLED
+}
+
+enum CommissionTier {
+  BRONZE
+  SILVER
+  GOLD
+  DIAMOND
+}
+
 model User {
   id            String         @id @default(cuid())
   username      String         @unique
@@ -36,12 +50,25 @@ model User {
   role          Role           @default(MEMBER)
   balance       Decimal        @default(0) @db.Decimal(20, 2)
   pricingTier   Int            @default(1)
+  
+  // Referral System
+  referralCode       String?    @unique
+  referredById       String?
+  referredBy         User?      @relation("Referrals", fields: [referredById], references: [id])
+  referrals          User[]     @relation("Referrals")
+  commissionBalance  Decimal    @default(0) @db.Decimal(20, 2)
+  totalSales         Decimal    @default(0) @db.Decimal(20, 2)
+  commissionTier     CommissionTier @default(BRONZE)
+  
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   orders        SmmOrder[]
   purchases     AccountPurchase[]
   transactions  Transaction[]
   deposits      Deposit[]
+  commissionsEarned  Commission[] @relation("AgentCommissions")
+  commissionsGenerated Commission[] @relation("ReferredUserCommissions")
+  withdrawals   CommissionWithdrawal[]
 }
 
 model SmmProvider {
@@ -155,4 +182,44 @@ model Deposit {
   transactionId String   @unique // The bank/sepay transaction reference
   status        String   @default("COMPLETED")
   createdAt     DateTime @default(now())
+}
+
+model Commission {
+  id               String           @id @default(cuid())
+  agentId          String
+  agent            User             @relation("AgentCommissions", fields: [agentId], references: [id])
+  referredUserId   String
+  referredUser     User             @relation("ReferredUserCommissions", fields: [referredUserId], references: [id])
+  orderId          String?          // SmmOrder or AccountPurchase ID
+  purchaseId       String?
+  orderType        String           // "SMM_ORDER" or "ACCOUNT_PURCHASE"
+  orderAmount      Decimal          @db.Decimal(20, 2)
+  commissionRate   Decimal          @db.Decimal(5, 2)
+  commissionAmount Decimal          @db.Decimal(20, 2)
+  status           CommissionStatus @default(PENDING)
+  paidAt           DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([agentId])
+  @@index([referredUserId])
+  @@index([status])
+}
+
+model CommissionWithdrawal {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  amount          Decimal  @db.Decimal(20, 2)
+  bankName        String
+  bankAccount     String
+  bankAccountName String
+  status          String   @default("PENDING") // PENDING, APPROVED, COMPLETED, REJECTED
+  processedAt     DateTime?
+  note            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }

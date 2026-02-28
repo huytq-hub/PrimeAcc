@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { User, Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, Check, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { validators } from "@/lib/auth/validation";
@@ -16,7 +16,9 @@ interface FieldState {
 
 export function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { register, error, clearError, isLoading, isAuthenticated } = useAuth();
+  const referralCode = searchParams.get("ref")?.trim() || undefined;
 
   const [formData, setFormData] = useState({
     username: "",
@@ -148,7 +150,7 @@ export function RegisterForm() {
     }
 
     try {
-      await register(formData.username, formData.email, formData.password);
+      await register(formData.username, formData.email, formData.password, referralCode);
       
       // Redirect to login on success
       router.push("/login?message=registration_success");

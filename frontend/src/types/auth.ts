@@ -51,9 +51,10 @@ export interface AuthState {
 export interface AuthContextType extends AuthState {
   // Actions
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string, referralCode?: string) => Promise<void>;
   logout: () => void;
   clearError: () => void;
+  refreshUser: () => Promise<void>;
   
   // Role helpers
   hasRole: (role: UserRole) => boolean;
@@ -97,6 +98,7 @@ export interface RegisterData {
   username: string;
   email: string;
   password: string;
+  referralCode?: string;
 }
 
 /**

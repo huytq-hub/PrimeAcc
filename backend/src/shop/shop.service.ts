@@ -1,12 +1,14 @@
 import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
+import { ReferralService } from '../referral/referral.service';
 
 @Injectable()
 export class ShopService {
   constructor(
     private prisma: PrismaService,
     private userService: UserService,
+    private referralService: ReferralService,
   ) {}
 
   async getProducts() {
@@ -125,6 +127,17 @@ export class ShopService {
           referenceId: purchase.id,
         },
       });
+
+      // 7. Create commission if user was referred
+      if (user.referredById) {
+        await this.referralService.createCommission({
+          agentId: user.referredById,
+          referredUserId: userId,
+          purchaseId: purchase.id,
+          orderType: 'ACCOUNT_PURCHASE',
+          orderAmount: price,
+        });
+      }
 
       return {
         purchaseId: purchase.id,
