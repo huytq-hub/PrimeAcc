@@ -74,7 +74,7 @@ export interface Withdrawal {
 export const adminApi = {
   // Dashboard
   getDashboardStats: async (): Promise<DashboardStats> => {
-    const response = await apiClient.get('/admin/stats');
+    const response = await apiClient.get<DashboardStats>('/admin/stats');
     return response.data;
   },
 
