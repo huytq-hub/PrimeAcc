@@ -2,6 +2,8 @@ FROM node:24-alpine AS base
 
 # Disable npm update notifications
 ENV NPM_CONFIG_UPDATE_NOTIFIER=false
+# Limit Node.js memory usage during build
+ENV NODE_OPTIONS="--max-old-space-size=1024"
 
 # Install dependencies only when needed
 FROM base AS deps

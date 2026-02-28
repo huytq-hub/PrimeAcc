@@ -19,10 +19,10 @@ COPY . .
 RUN npx prisma generate
 
 # Build application
-RUN npm run build
+RUN npm run build && ls -la dist/ && echo "Build successful, dist folder contains:" && ls -la dist/
 
 # Expose port
 EXPOSE 3000
 
-# Start application
-CMD ["npm", "run", "start:prod"]
+# Start application - use dev mode for now
+CMD ["npm", "run", "start:dev"]
