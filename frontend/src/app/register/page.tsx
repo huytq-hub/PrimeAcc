@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Github, Sparkles, Shield, Zap, Users } from "lucide-react";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
-export default function RegisterPage() {
+function RegisterContent() {
   const searchParams = useSearchParams();
   const messageParam = searchParams.get("message");
 
@@ -129,5 +129,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}>
+      <RegisterContent />
+    </Suspense>
   );
 }
